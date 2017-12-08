@@ -153,8 +153,7 @@ class Album extends Component {
                    handleNextClick={() => this.handleNextClick()}
                    handleTimeChange={(e) => this.handleTimeChange(e)}
                    handleVolumeChange={(e) => this.handleVolumeChange(e)}
-                   formatDurationTime={() => this.formatTime(this.audioElement.duration)}
-                   formatRunningTime={() => this.formatTime(this.audioElement.currentTime)}
+                   formatTime={(t) => this.formatTime(t)}
         />
       </section>
     );
