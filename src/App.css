@@ -1,8 +1,8 @@
 .App {
-  text-align: center;
+  background: linear-gradient(to right, rgb(37,40,45)24%,rgb(39,42,50));
 }
 
-.App-logo {
+/*.App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
@@ -25,4 +25,69 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}*/
+
+a {
+  text-decoration: none;
+  color: rgb(199,199,199);
+}
+
+#header-wrapper {
+  width: 100%;
+  background: linear-gradient(to right, rgb(37,40,45)24%,rgb(39,42,50));
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  height: 43px;
+}
+
+header {
+  padding: 9px 12px;
+  max-width: 540px;
+  margin: 0 auto;
+  z-index: 10;
+}
+
+header h1 {
+  color: rgb(199,199,199);
+  font-size: 1.4rem;
+  display: inline-block;
+}
+
+header nav {
+  float: right;
+}
+
+header nav a {
+  font-weight: lighter;
+  line-height: 1.7rem;
+  margin-left: 15px;
+}
+
+.nav-link{
+  color: rgb(177,177,177);
+  text-align: center;
+  padding: 3px 7px;
+  background: linear-gradient(rgba(133,133,133,1),rgba(122,122,122,0.1));
+  border-top: 1px solid rgb(66,66,66);
+  border-left: 1px solid rgb(111,111,111);
+  border-right: 1px solid rgb(66,66,66);
+  border-bottom: 1px solid rgb(111,111,111);
+}
+
+.nav-link:hover{
+  color: #00ffff;
+  background: linear-gradient(rgba(144,144,144,1),rgba(122,122,122,0.3));
+}
+
+.selected {
+  border: 1px solid #00ffff;
+  background: linear-gradient(rgba(144,144,144,1),rgba(122,122,122,0.3));
+  color: #00ffff;
+}
+
+
+#main-content {
+  padding-top: 43px;
 }

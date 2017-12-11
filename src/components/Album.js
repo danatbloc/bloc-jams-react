@@ -17,7 +17,8 @@ class Album extends Component {
       currentTime: 0,
       currentVolume: 0.5,
       duration: album.songs[0].duration,
-      isPlaying: false
+      isPlaying: false,
+      songListOpen: false
     };
 
     this.audioElement = document.createElement('audio');
@@ -25,25 +26,28 @@ class Album extends Component {
   }
 
   componentDidMount(){
-    console.log(this.audioElement.duration);
-
     this.eventListeners = {
       timeupdate: e => {
         this.setState({currentTime: this.audioElement.currentTime});
       },
       durationchange: e => {
         this.setState({duration: this.audioElement.duration});
+      },
+      ended: e => {
+          this.autoAdvance();
       }
     };
 
     this.audioElement.addEventListener('timeupdate',this.eventListeners.timeupdate);
     this.audioElement.addEventListener('durationchange', this.eventListeners.durationchange);
+    this.audioElement.addEventListener('ended',this.eventListeners.ended);
   }
 
   componentWillUnmount() {
     this.audioElement.src = null;
     this.audioElement.removeEventListener('timeupdate', this.eventListeners.timeupdate);
     this.audioElement.removeEventListener('durationchange', this.eventListeners.durationchange);
+    this.audioElement.removeEventListener('ended',this.eventListeners.ended);
   }
 
   play() {
@@ -89,14 +93,14 @@ class Album extends Component {
 
   handleTimeChange(e) {
     const newTime = this.audioElement.duration * e.target.value;
-    this.audioElement.currentTime = newTime;
+    this.audioElement.currentTime = newTime || 0;
     this.setState({ currentTime: newTime });
   }
 
   handleVolumeChange(e) {
     const newVolume = e.target.value;
     this.audioElement.volume = newVolume;
-    this.setState({ currentVolume: newVolume })
+    this.setState({ currentVolume: newVolume });
   }
 
   formatTime(time) {
@@ -106,10 +110,39 @@ class Album extends Component {
     return `${minutes}:${seconds}`;
   }
 
+  autoAdvance(){
+    const currentIndex = this.state.album.songs.findIndex(song => song === this.state.currentSong);
+    if(currentIndex < this.state.album.songs.length-1){
+      this.handleNextClick();
+    }else{
+      this.setSong(this.state.album.songs[0]);
+      this.pause();
+    }
+  }
+
+  openSesame() {
+    const list = document.getElementsByClassName('song-list')[0];
+    const arrow = document.getElementsByClassName('slide-arrow')[0];
+
+    if(this.state.songListOpen===false){
+      list.classList.add('show-list');
+      arrow.classList.add('slide-arrow-open');
+      arrow.style.borderTop = "10px solid #00ffff";
+
+      this.setState( {songListOpen: true} );
+    }else{
+      list.classList.remove('show-list');
+      arrow.classList.remove('slide-arrow-open');
+      arrow.style.borderTop = "10px solid rgb(66,66,66)";
+
+      this.setState( {songListOpen: false});
+    }
+  }
+
 
   render() {
     return (
-      <section className="album">
+      <main id="player-skin">
         <section id="album-info">
           <img id="album-cover-art" src={this.state.album.albumCover} />
           <div className="album-details">
@@ -119,43 +152,58 @@ class Album extends Component {
           </div>
         </section>
 
-        <table id="song-list">
-          <colgroup>
-            <col id="song-number-column" />
-            <col id="song-title-column" />
-            <col id="song-duration-column" />
-          </colgroup>
-          <tbody>
-            {
-              this.state.album.songs.map( (song, index) =>
-                <tr className="song" key={index} onClick={() => this.handleSongClick(song)} >
-                  <td className="song-actions">
-                    <button>
-                      <span className="song-number">{index + 1}</span>
-                      <span className="ion-play"></span>
-                      <span className="ion-pause"></span>
-                    </button>
-                  </td>
-                  <td>{song.title}</td>
-                  <td>{this.formatTime(song.duration)}</td>
-                </tr>
-              )
-            }
-          </tbody>
-        </table>
-        <PlayerBar isPlaying={this.state.isPlaying}
-                   currentSong={this.state.currentSong}
-                   currentTime={this.audioElement.currentTime}
-                   duration={this.audioElement.duration}
-                   currentVolume={this.state.currentVolume}
-                   handleSongClick={() => this.handleSongClick(this.state.currentSong)}
-                   handlePrevClick={() => this.handlePrevClick()}
-                   handleNextClick={() => this.handleNextClick()}
-                   handleTimeChange={(e) => this.handleTimeChange(e)}
-                   handleVolumeChange={(e) => this.handleVolumeChange(e)}
-                   formatTime={(t) => this.formatTime(t)}
-        />
-      </section>
+        <section id="lower-player-skin">
+          <section id="controls">
+            <section id="current-song">
+              <p id="current-song-title">{this.state.currentSong.title}</p>
+              <p id="current-song-artist">{this.state.album.artist}</p>
+            </section>
+
+            <PlayerBar isPlaying={this.state.isPlaying}
+                       currentSong={this.state.currentSong}
+                       currentTime={this.audioElement.currentTime}
+                       duration={this.audioElement.duration}
+                       currentVolume={this.state.currentVolume}
+                       handleSongClick={(s) => this.handleSongClick(this.state.currentSong)}
+                       handlePrevClick={() => this.handlePrevClick()}
+                       handleNextClick={() => this.handleNextClick()}
+                       handleTimeChange={(e) => this.handleTimeChange(e)}
+                       handleVolumeChange={(e) => this.handleVolumeChange(e)}
+                       autoAdvance={() => this.autoAdvance()}
+                       formatTime={(t) => this.formatTime(t)}
+            />
+          </section>
+
+          <div id="arrow-container">
+            <div className="slide-arrow" classlist="none" onClick={() => this.openSesame()}></div>
+          </div>
+
+          <table className="song-list">
+            <colgroup>
+              <col id="song-number-column" />
+              <col id="song-title-column" />
+              <col id="song-duration-column" />
+            </colgroup>
+            <tbody>
+              {
+                this.state.album.songs.map( (song, index) =>
+                  <tr className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'song-playing' : 'song-not-playing' } key={index} onClick={() => this.handleSongClick(song)} >
+                    <td className="song-actions">
+                      <button>
+
+                        <span className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'ion-pause td-pause' : 'ion-play' }></span>
+
+                      </button>
+                    </td>
+                    <td id="song-title-cell">{song.title}</td>
+                    <td id="song-duration-cell">{this.formatTime(song.duration)}</td>
+                  </tr>
+                )
+              }
+            </tbody>
+          </table>
+        </section>
+      </main>
     );
   }
 }
