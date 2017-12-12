@@ -153,6 +153,7 @@ Album Component
   max-width: 564px;
   height: 120px;
   position: relative;
+  margin-top: 10px;
 }
 
 #play-pause {
@@ -162,7 +163,7 @@ Album Component
   background: linear-gradient(rgb(51,54,62) 20%, rgb(30,33,38) 100%);
   border: 1px solid rgb(33,33,33);
   position: absolute;
-  top: 0;
+  top: 5px;
   left: 10px;
   outline: none;
   box-shadow: 0px 2px 1px -1px rgb(33,33,33);
@@ -188,7 +189,7 @@ Album Component
 #previous,
 #next {
   position: absolute;
-  top: 5px;
+  top: 10px;
   width: 43px;
   height: 43px;
   border-radius: 50%;
@@ -225,20 +226,20 @@ Album Component
 
 .ion-volume-low {
   position: absolute;
-  top: 16px;
+  top: 21px;
   left: 189px;
 }
 
 .seek-bar-volume {
   position: absolute;
-  top: 26px;
+  top: 31px;
   left: 209px;
   width: 71px;
 }
 
 .ion-volume-high {
   position: absolute;
-  top: 16px;
+  top: 21px;
   left: 280px;
 }
 
@@ -355,11 +356,25 @@ table {
 
 table, tr, td {
   border-collapse: collapse;
+  font-size: 1.1rem;
+}
+
+tr.song-not-playing {
+  height: 26px;
 }
 
 .song-playing {
   cursor: default;
   background: linear-gradient(rgb(61,64,72)10%, rgb(35,38,43) 100%);
+}
+
+.track-number {
+  font-size: 1.1rem;
+  color: rgb(133,133,133);
+}
+
+.no-track-number {
+  display: none;
 }
 
 .song-not-playing {
@@ -374,13 +389,29 @@ table, tr, td {
   padding: 2px 3px;
 }
 
+.ion-play-button::before {
+  display: none;
+}
+
 .song-not-playing:hover {
   background: linear-gradient(rgb(61,64,72)10%, rgb(35,38,43) 100%);
+}
+
+.song-not-playing:hover > td button .track-number {
+  display: none;
+}
+
+.song-not-playing:hover > td button .ion-play-button::before {
+  display: block;
 }
 
 #song-title-column {
   width: 250px;
   text-align: left;
+}
+
+.song-actions {
+  width: 25px;
 }
 
 #song-title-cell {
@@ -412,6 +443,9 @@ table, tr, td {
 
 @media(min-width: 680px) {
 
+  .landing {
+    margin-top: 10px;
+  }
 
   /********************
   Library Component
@@ -460,7 +494,7 @@ table, tr, td {
   }
   #lower-player-skin {
     position: absolute;
-    left: 359px;
-    top: 67px;
+    left: 355px;
+    top: 81px;
   }
 }

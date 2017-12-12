@@ -33,7 +33,7 @@ class Album extends Component {
       durationchange: e => {
         this.setState({duration: this.audioElement.duration});
       },
-      ended: e => {
+      ended: () => {
           this.autoAdvance();
       }
     };
@@ -52,7 +52,7 @@ class Album extends Component {
 
   play() {
     this.audioElement.play();
-    this.setState({ isPlaying: true })
+    this.setState({ isPlaying: true });
   }
 
   pause() {
@@ -127,15 +127,13 @@ class Album extends Component {
     if(this.state.songListOpen===false){
       list.classList.add('show-list');
       arrow.classList.add('slide-arrow-open');
-      arrow.style.borderTop = "10px solid #00ffff";
 
-      this.setState( {songListOpen: true} );
+      this.setState({ songListOpen: true });
     }else{
       list.classList.remove('show-list');
       arrow.classList.remove('slide-arrow-open');
-      arrow.style.borderTop = "10px solid rgb(66,66,66)";
 
-      this.setState( {songListOpen: false});
+      this.setState({ songListOpen: false });
     }
   }
 
@@ -187,11 +185,12 @@ class Album extends Component {
             <tbody>
               {
                 this.state.album.songs.map( (song, index) =>
-                  <tr className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'song-playing' : 'song-not-playing' } key={index} onClick={() => this.handleSongClick(song)} >
+                  <tr className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'song-playing hide-number' : 'song-not-playing' } key={index} onClick={() => this.handleSongClick(song)} >
                     <td className="song-actions">
                       <button>
 
-                        <span className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'ion-pause td-pause' : 'ion-play' }></span>
+                        <span className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'no-track-number' : 'track-number' }>{index + 1}</span>
+                        <span className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'ion-pause td-pause' : 'ion-play ion-play-button' }></span>
 
                       </button>
                     </td>
