@@ -334,10 +334,6 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   border-top: 10px solid #00ffff;
 }
 
-.song-list {
-  display: none;
-}
-
 .slide-arrow-open {
   border-top: 10px solid #00ffff;
   transition: all 0.3s;
