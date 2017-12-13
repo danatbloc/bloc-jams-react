@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, NavLink, Link } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
 import './App.css';
 import Landing from './components/Landing';
 import Library from './components/Library';

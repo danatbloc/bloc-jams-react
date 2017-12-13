@@ -38,11 +38,13 @@ class PlayerBar extends Component {
           <input
             type="range"
             className="seek-bar-range"
-            value={(this.props.currentTime/this.props.duration)}
+            value={(this.props.currentTime/this.props.duration) || 0}
             max="1"
             min="0"
             step="0.01"
             onChange={this.props.handleTimeChange}
+            onMouseDown={this.props.onDrag}
+            onMouseUp={this.props.onNoDrag}
           />
 
           <div className="total-time">{this.props.formatTime(this.props.duration)}</div>

@@ -18,7 +18,8 @@ class Album extends Component {
       currentVolume: 0.5,
       duration: album.songs[0].duration,
       isPlaying: false,
-      songListOpen: false
+      songListOpen: false,
+      isDragging: false
     };
 
     this.audioElement = document.createElement('audio');
@@ -28,13 +29,18 @@ class Album extends Component {
   componentDidMount(){
     this.eventListeners = {
       timeupdate: e => {
+        console.log("timeupdate");
         this.setState({currentTime: this.audioElement.currentTime});
       },
       durationchange: e => {
+        console.log("durationchange");
+
         this.setState({duration: this.audioElement.duration});
       },
       ended: () => {
-          this.autoAdvance();
+        console.log("onEnd");
+
+          this.onEnd();
       }
     };
 
@@ -49,6 +55,7 @@ class Album extends Component {
     this.audioElement.removeEventListener('durationchange', this.eventListeners.durationchange);
     this.audioElement.removeEventListener('ended',this.eventListeners.ended);
   }
+
 
   play() {
     this.audioElement.play();
@@ -92,8 +99,14 @@ class Album extends Component {
   }
 
   handleTimeChange(e) {
+    console.log(e.target.value);
+
     const newTime = this.audioElement.duration * e.target.value;
+
+    console.log("newTime: " + newTime);
+
     this.audioElement.currentTime = newTime || 0;
+    console.log(this.audioElement.currentTime);
     this.setState({ currentTime: newTime });
   }
 
@@ -108,16 +121,6 @@ class Album extends Component {
     const minutes = Math.floor(time/60);
     const seconds = ("0" + Math.round(time%60)).slice(-2);
     return `${minutes}:${seconds}`;
-  }
-
-  autoAdvance(){
-    const currentIndex = this.state.album.songs.findIndex(song => song === this.state.currentSong);
-    if(currentIndex < this.state.album.songs.length-1){
-      this.handleNextClick();
-    }else{
-      this.setSong(this.state.album.songs[0]);
-      this.pause();
-    }
   }
 
   openSesame() {
@@ -137,12 +140,43 @@ class Album extends Component {
     }
   }
 
+  autoAdvance(){
+    const currentIndex = this.state.album.songs.findIndex(song => song === this.state.currentSong);
+    if(currentIndex < this.state.album.songs.length-1){
+      this.handleNextClick();
+    }else{
+      this.setSong(this.state.album.songs[0]);
+      this.pause();
+    }
+  }
+
+  onEnd(){
+    if(!this.state.isDragging){
+      this.autoAdvance();
+    }
+  }
+
+  onDrag(){
+    this.setState({ isDragging: true });
+  }
+
+  onNoDrag(e){
+    console.log("onNoDrag");
+    this.setState({ isDragging: false });
+
+    if(this.state.currentTime >= this.state.duration){
+      this.autoAdvance();
+    }else{
+      this.handleTimeChange(e);
+    }
+  }
+
 
   render() {
     return (
       <main id="player-skin">
         <section id="album-info">
-          <img id="album-cover-art" src={this.state.album.albumCover} />
+          <img id="album-cover-art" src={this.state.album.albumCover} alt="{this.state.album.title}" />
           <div className="album-details">
             <h1 id="album-title">{this.state.album.title}</h1>
             <h2 className="artist">{this.state.album.artist}</h2>
@@ -169,6 +203,8 @@ class Album extends Component {
                        handleVolumeChange={(e) => this.handleVolumeChange(e)}
                        autoAdvance={() => this.autoAdvance()}
                        formatTime={(t) => this.formatTime(t)}
+                       onDrag={() => this.onDrag()}
+                       onNoDrag={(e) => this.onNoDrag(e)}
             />
           </section>
 

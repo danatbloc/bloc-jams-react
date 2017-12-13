@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 const Landing = () => (
@@ -22,7 +22,7 @@ const Landing = () => (
           </div>
         </section>
     </section>
-  </Link>  
+  </Link>
 );
 
 
