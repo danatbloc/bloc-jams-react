@@ -29,18 +29,13 @@ class Album extends Component {
   componentDidMount(){
     this.eventListeners = {
       timeupdate: e => {
-        console.log("timeupdate");
         this.setState({currentTime: this.audioElement.currentTime});
       },
       durationchange: e => {
-        console.log("durationchange");
-
         this.setState({duration: this.audioElement.duration});
       },
       ended: () => {
-        console.log("onEnd");
-
-          this.onEnd();
+        this.onEnd();
       }
     };
 
@@ -99,14 +94,8 @@ class Album extends Component {
   }
 
   handleTimeChange(e) {
-    console.log(e.target.value);
-
     const newTime = this.audioElement.duration * e.target.value;
-
-    console.log("newTime: " + newTime);
-
     this.audioElement.currentTime = newTime || 0;
-    console.log(this.audioElement.currentTime);
     this.setState({ currentTime: newTime });
   }
 
@@ -161,13 +150,12 @@ class Album extends Component {
   }
 
   onNoDrag(e){
-    console.log("onNoDrag");
     this.setState({ isDragging: false });
 
     if(this.state.currentTime >= this.state.duration){
       this.autoAdvance();
     }else{
-      this.handleTimeChange(e);
+      this.play();
     }
   }
 
@@ -207,36 +195,37 @@ class Album extends Component {
                        onNoDrag={(e) => this.onNoDrag(e)}
             />
           </section>
+          <section id="song-list-container">
+            <div id="arrow-container">
+              <div className="slide-arrow" classlist="none" onClick={() => this.openSesame()}></div>
+            </div>
 
-          <div id="arrow-container">
-            <div className="slide-arrow" classlist="none" onClick={() => this.openSesame()}></div>
-          </div>
+            <table className="song-list">
+              <colgroup>
+                <col id="song-number-column" />
+                <col id="song-title-column" />
+                <col id="song-duration-column" />
+              </colgroup>
+              <tbody>
+                {
+                  this.state.album.songs.map( (song, index) =>
+                    <tr className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'song-playing hide-number' : 'song-not-playing' } key={index} onClick={() => this.handleSongClick(song)} >
+                      <td className="song-actions">
+                        <button>
 
-          <table className="song-list">
-            <colgroup>
-              <col id="song-number-column" />
-              <col id="song-title-column" />
-              <col id="song-duration-column" />
-            </colgroup>
-            <tbody>
-              {
-                this.state.album.songs.map( (song, index) =>
-                  <tr className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'song-playing hide-number' : 'song-not-playing' } key={index} onClick={() => this.handleSongClick(song)} >
-                    <td className="song-actions">
-                      <button>
+                          <span className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'no-track-number' : 'track-number' }>{index + 1}</span>
+                          <span className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'ion-pause td-pause' : 'ion-play ion-play-button' }></span>
 
-                        <span className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'no-track-number' : 'track-number' }>{index + 1}</span>
-                        <span className={this.state.currentSong.title === song.title && this.state.isPlaying ? 'ion-pause td-pause' : 'ion-play ion-play-button' }></span>
-
-                      </button>
-                    </td>
-                    <td id="song-title-cell">{song.title}</td>
-                    <td id="song-duration-cell">{this.formatTime(song.duration)}</td>
-                  </tr>
-                )
-              }
-            </tbody>
-          </table>
+                        </button>
+                      </td>
+                      <td id="song-title-cell">{song.title}</td>
+                      <td id="song-duration-cell">{this.formatTime(song.duration)}</td>
+                    </tr>
+                  )
+                }
+              </tbody>
+            </table>
+          </section>
         </section>
       </main>
     );
