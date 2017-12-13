@@ -26,7 +26,8 @@ class SlideDrawer extends Component {
           <tbody>
             {
               this.props.songList.map( (song, index) =>
-                <tr className={this.props.currentSong.title === song.title && this.props.isPlaying ? 'song-playing hide-number' : 'song-not-playing' } key={index} onClick={this.props.handleSongClick} >
+
+                <tr className={this.props.currentSong.title === song.title && this.props.isPlaying ? 'song-playing hide-number' : 'song-not-playing' } key={index} onClick={() => this.props.handleSongClick(song)} >
                   <td className="song-actions">
                     <button>
 

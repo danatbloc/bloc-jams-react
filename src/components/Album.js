@@ -202,7 +202,7 @@ class Album extends Component {
                        isPlaying={this.state.isPlaying}
                        formatTime={(t) => this.formatTime(t)}
                        openSesame={() => this.openSesame()}
-                       handleSongClick={(s) => this.handleSongClick(this.state.currentSong)}
+                       handleSongClick={(s) => this.handleSongClick(s)}
           />
 
         </section>
