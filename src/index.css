@@ -382,6 +382,7 @@ tr.song-not-playing {
 
 .song-list-container {
   width: 320px;
+  margin:0 auto;
 }
 
 .song-list tbody tr td button{
