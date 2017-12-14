@@ -281,7 +281,7 @@ Album Component
 
 .seek-bar-volume::-webkit-slider-thumb:hover,
 .seek-bar-range::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.5);
 }
 
 input[type=range]{
@@ -323,7 +323,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 
 .slide-arrow {
   margin: 0 auto;
-  border-top: 10px solid rgb(66,66,66);
+  border-top: 10px solid #1a7272;
   border-left: 30px solid transparent;
   border-right: 30px solid transparent;
   width: 1px;
@@ -333,6 +333,8 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 .slide-arrow:hover {
   border-top: 10px solid #00ffff;
 }
+
+
 
 .slide-arrow-open {
   border-top: 10px solid #00ffff;
@@ -378,6 +380,10 @@ tr.song-not-playing {
   background: linear-gradient(rgb(51,54,62)10%, rgb(30,33,38) 100%);
 }
 
+.song-list-container {
+  width: 320px;
+}
+
 .song-list tbody tr td button{
   background-color: inherit;
   border: none;
@@ -402,7 +408,7 @@ tr.song-not-playing {
 }
 
 #song-title-column {
-  width: 250px;
+  width: 249px;
   text-align: left;
 }
 

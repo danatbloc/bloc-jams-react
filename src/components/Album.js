@@ -112,23 +112,6 @@ class Album extends Component {
     return `${minutes}:${seconds}`;
   }
 
-  openSesame() {
-    const list = document.getElementsByClassName('song-list')[0];
-    const arrow = document.getElementsByClassName('slide-arrow')[0];
-
-    if(this.state.songListOpen===false){
-      list.classList.add('show-list');
-      arrow.classList.add('slide-arrow-open');
-
-      this.setState({ songListOpen: true });
-    }else{
-      list.classList.remove('show-list');
-      arrow.classList.remove('slide-arrow-open');
-
-      this.setState({ songListOpen: false });
-    }
-  }
-
   autoAdvance(){
     const currentIndex = this.state.album.songs.findIndex(song => song === this.state.currentSong);
     if(currentIndex < this.state.album.songs.length-1){
